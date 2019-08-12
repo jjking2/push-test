@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- enable this if you run this demo on edge -->
+<!-- script src="https://cdnjs.cloudflare.com/ajax/libs/event-source-polyfill/0.0.9/eventsource.min.js"></script -->
+</head>
+<body>
+
+<h1>Server sent event demo</h1>
+
+<p>Javascript code in this page connects to a cgi-bin script running at server side</p>
+<p>Data recieved from the server is shown in the textarea below</p>
+
+<textarea id="textarea1"></textarea>
+
+<script>
+// 2019/08/11 tested
+// from Using server-sent events
+// https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
+var textArea = document.getElementById('textarea1');
+if (typeof(EventSource) !== "undefined") {
+  console.log("Everything looks good.");
+  // var evtSource = new EventSource("http://example.com/cgi-bin/sse-test.cgi", { withCredentials: true });
+  var evtSource = new EventSource("/cgi-bin/sse-test.cgi");
+  evtSource.onmessage = function(e) {
+    console.log('message: ' + e.data);
+    textArea.value += e.data + "\n";
+  };
+  evtSource.onerror = function(e) {
+    console.log("EventSource failed: " + e);
+  };
+} else {
+  console.log("Your browser does not support Server-sent events! Please upgrade it!");
+}
+</script>
+
+</body>
+</html>
+
